@@ -1,26 +1,116 @@
 @import "tailwindcss";
 
+/* 1. Define your Tailwind v4 theme variables */
+@theme {
+  --color-background: hsl(var(--background, 0 0% 100%));
+  --color-foreground: hsl(var(--foreground, 222.2 84% 4.9%));
+
+  /* Custom project colors */
+  --color-navy: #0a192f; /* Replace with your actual navy hex code if different */
+  --color-navy-800: #172a45;
+  --color-warm-200: #e2e8f0;
+
+  /* Custom project shadows */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* 2. Fallback CSS variables if you are using shadcn style switching */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+}
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* 3. Base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  ::selection {
+    @apply bg-navy/10 text-navy;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 4. Component classes */
+@layer components {
+  .container-narrow {
+    @apply mx-auto max-w-5xl px-5 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply mx-auto max-w-7xl px-5 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-28;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold tracking-[0.2em] uppercase text-navy/70;
+  }
+
+  .heading-xl {
+    @apply font-serif text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-navy leading-[1.1];
+  }
+
+  .heading-lg {
+    @apply font-serif text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-navy leading-[1.15];
+  }
+
+  .heading-md {
+    @apply font-serif text-2xl sm:text-3xl font-medium tracking-tight text-navy leading-snug;
+  }
+
+  .body-lg {
+    @apply text-lg sm:text-xl text-foreground/80 leading-relaxed;
+  }
+
+  .body {
+    @apply text-base text-foreground/75 leading-relaxed;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-navy px-6 py-3.5 text-sm font-semibold tracking-wide text-white transition-all duration-200 hover:bg-navy-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-navy/20 bg-transparent px-6 py-3.5 text-sm font-semibold tracking-wide text-navy transition-all duration-200 hover:bg-navy/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 text-sm font-semibold tracking-wide text-navy/80 transition-colors hover:text-navy;
+  }
+
+  .card {
+    @apply rounded-2xl border border-warm-200 bg-white p-6 shadow-soft transition-shadow duration-300 hover:shadow-card;
+  }
+
+  .card-elevated {
+    @apply rounded-2xl border border-warm-200 bg-white p-8 shadow-card;
+  }
+}
+
+/* Subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f5f3ef;
+}
+::-webkit-scrollbar-thumb {
+  background: #b8ae9c;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a88b3f;
 }
