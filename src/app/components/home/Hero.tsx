@@ -53,12 +53,20 @@ export function Hero() {
           </div>
 
           <div className="pt-6 border-t border-white/20">
-            <p className="text-xs font-semibold tracking-[0.15em] uppercase text-white/50 mb-3">
+            <p className="text-xs font-semibold tracking-[0.15em] uppercase text-white/50 mb-4">
               Serving clients across
             </p>
-            <p className="text-sm text-white/80 font-medium">
-              Davao · Cebu · Cagayan de Oro · Iloilo · Metro Manila
-            </p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-white/80 font-medium">
+              <span>Davao</span>
+              <span className="text-white/40">·</span>
+              <span>Cebu</span>
+              <span className="text-white/40">·</span>
+              <span>Cagayan de Oro</span>
+              <span className="text-white/40">·</span>
+              <span>Iloilo</span>
+              <span className="text-white/40">·</span>
+              <span>Metro Manila</span>
+            </div>
           </div>
         </div>
       </div>
