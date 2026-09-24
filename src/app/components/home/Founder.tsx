@@ -50,7 +50,7 @@ export function Founder() {
               </p>
             </div>
 
-            <Link href="/about" className="btn-primary">
+            <Link href="/about" className="btn-primary rounded-xl">
               Meet the Astra Team
               <ArrowRight className="w-4 h-4" />
             </Link>

@@ -18,14 +18,14 @@ export function FinalCTA() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/request"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold tracking-wide text-navy transition-all hover:bg-warm-100"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 text-sm font-semibold tracking-wide text-navy transition-all hover:bg-warm-100"
           >
             Tell Us What You Need
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-7 py-3.5 text-sm font-semibold tracking-wide text-white transition-all hover:bg-white/10"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-7 py-3.5 text-sm font-semibold tracking-wide text-white transition-all hover:bg-white/10"
           >
             Talk to a Concierge
           </Link>

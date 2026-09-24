@@ -18,7 +18,7 @@ export function VerifiedConcierge() {
               that clients can use to confirm their identity through
               Astra&apos;s official verification system.
             </p>
-            <Link href="/verify" className="btn-primary">
+            <Link href="/verify" className="btn-primary rounded-xl">
               Verify This Concierge
               <ArrowRight className="w-4 h-4" />
             </Link>

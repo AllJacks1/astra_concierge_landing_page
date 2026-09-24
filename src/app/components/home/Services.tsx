@@ -127,7 +127,7 @@ export function Services() {
             If it requires someone on the ground in the Philippines, tell us
             what you’re trying to accomplish. We’ll tell you what we can do.
           </p>
-          <Link href="/request" className="btn-primary">
+          <Link href="/request" className="btn-primary rounded-xl">
             Tell Us What You Need
             <ArrowRight className="w-4 h-4" />
           </Link>
