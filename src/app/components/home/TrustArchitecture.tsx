@@ -4,66 +4,87 @@ import { Building2, Users, BadgeCheck, FileText } from "lucide-react";
 const pillars = [
   {
     icon: Building2,
-    title: "Identifiable Company",
+    title: "A real company, not a middleman",
     content: (
       <>
-        <p className="font-medium text-navy mb-1">Astra Concierge Philippines</p>
+        <p className="font-medium text-navy mb-1">
+          Astra Concierge Philippines
+        </p>
         <p className="text-sm text-foreground/70 mb-2">
           A service of Astra Group of Companies, Inc.
         </p>
         <p className="text-sm text-foreground/70">
-          Corporate information and legitimate contact channels.
+          Registered entity. Real address. Direct lines. No shell companies, no
+          anonymous operators hiding behind a chat window.
         </p>
       </>
     ),
   },
   {
     icon: Users,
-    title: "Identifiable People",
+    title: "Named people you can reach",
     content: (
       <p className="text-sm text-foreground/70">
-        Meet the people responsible for Astra. No anonymous operators.
+        The people running Astra have names, roles, and accountability. You will
+        never be passed between faceless agents when something important is at
+        stake.
       </p>
     ),
   },
   {
     icon: BadgeCheck,
-    title: "Verified Field Representatives",
+    title: "Field reps you can verify",
     content: (
       <p className="text-sm text-foreground/70">
-        Every Astra field representative can have a unique Concierge ID and
-        verification profile.
+        Every Astra representative carries a unique Concierge ID and a public
+        verification profile. If someone claims to be from us, you can check in
+        seconds.
       </p>
     ),
   },
   {
     icon: FileText,
-    title: "Clear Policies",
+    title: "Policies written in plain language",
     content: (
       <ul className="text-sm text-foreground/70 space-y-1">
         <li>
-          <Link href="/legal/terms" className="hover:text-navy underline-offset-2 hover:underline">
+          <Link
+            href="/legal/terms"
+            className="hover:text-navy underline-offset-2 hover:underline"
+          >
             Terms of Service
           </Link>
         </li>
         <li>
-          <Link href="/legal/privacy" className="hover:text-navy underline-offset-2 hover:underline">
+          <Link
+            href="/legal/privacy"
+            className="hover:text-navy underline-offset-2 hover:underline"
+          >
             Privacy Policy
           </Link>
         </li>
         <li>
-          <Link href="/legal/refund" className="hover:text-navy underline-offset-2 hover:underline">
-            Refund & Cancellation Policy
+          <Link
+            href="/legal/refund"
+            className="hover:text-navy underline-offset-2 hover:underline"
+          >
+            Refund & Cancellation
           </Link>
         </li>
         <li>
-          <Link href="/legal/limitations" className="hover:text-navy underline-offset-2 hover:underline">
-            Service Limitations
+          <Link
+            href="/legal/limitations"
+            className="hover:text-navy underline-offset-2 hover:underline"
+          >
+            What we can and cannot do
           </Link>
         </li>
         <li>
-          <Link href="/contact" className="hover:text-navy underline-offset-2 hover:underline">
-            Contact Information
+          <Link
+            href="/contact"
+            className="hover:text-navy underline-offset-2 hover:underline"
+          >
+            How to reach us
           </Link>
         </li>
       </ul>
@@ -77,11 +98,12 @@ export function TrustArchitecture() {
       <div className="container-wide">
         <div className="max-w-2xl mb-12 lg:mb-16">
           <h2 className="heading-lg mb-4">
-            You&apos;re trusting us with something that matters.
+            You&apos;re trusting us with things that actually matter.
           </h2>
           <p className="body-lg">
-            When you&apos;re thousands of kilometers away, trust isn&apos;t optional.
-            Astra is designed around identity, accountability and transparency.
+            When you&apos;re thousands of kilometers away, vague promises and
+            corporate jargon don&apos;t help. Astra is built so you always know
+            who is responsible, who is on the ground, and what the rules are.
           </p>
         </div>
 
