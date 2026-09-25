@@ -14,7 +14,7 @@ const footerLinks = {
     { href: "/legal/terms", label: "Terms of Service" },
     { href: "/legal/privacy", label: "Privacy Policy" },
     { href: "/legal/refund", label: "Refund & Cancellation Policy" },
-    { href: "/legal/limitations", label: "Service Limitations" },
+    { href: "/legal/service-limitations", label: "Service Limitations" },
   ],
 };
 
