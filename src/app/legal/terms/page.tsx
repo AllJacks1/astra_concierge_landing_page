@@ -1,4 +1,4 @@
-import { TermsClient } from "@/app/legal/terms/terms-client";
+import { TermsClient } from "./terms-client";
 
 export const metadata = {
   title: "Terms of Service — Astra Concierge Philippines",
