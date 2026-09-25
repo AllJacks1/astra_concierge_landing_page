@@ -107,7 +107,7 @@ export default function LocationsPage() {
       </section>
 
       {/* Expand CTA */}
-      <section className="section-padding bg-navy text-white">
+      <section className="section-padding bg-navy text-white -mb-20">
         <div className="container-narrow text-center">
           <h2 className="font-serif text-2xl sm:text-3xl font-medium mb-4">
             Need assistance in another location?
@@ -118,7 +118,7 @@ export default function LocationsPage() {
           </p>
           <Link
             href="/request"
-            className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-navy hover:bg-warm-100 transition-colors"
+            className="inline-flex items-center gap-2 rounded-xl bg-white px-7 py-3.5 text-sm font-semibold text-navy hover:bg-gray-300 transition-colors"
           >
             Request Assistance in Another Location
             <ArrowRight className="w-4 h-4" />
