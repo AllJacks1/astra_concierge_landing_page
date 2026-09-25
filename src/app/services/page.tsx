@@ -5,11 +5,11 @@ import { ArrowRight } from "lucide-react";
 export const metadata: Metadata = {
   title: "Concierge Services in the Philippines | Astra",
   description:
-    "On-the-ground coordination across the Philippines: travel assistance, business concierge, property support, transportation, local errands, and relocation help — with clear limits on what we do and don’t handle.",
+    "On-the-ground coordination across the Philippines: travel assistance, business concierge, property support, transportation, local errands, relocation help, and custom requests — with clear limits on what we do and don’t handle.",
   openGraph: {
     title: "Concierge Services in the Philippines | Astra",
     description:
-      "Local capability when remote tools aren’t enough. Travel, business, property, transport, errands, and relocation coordination.",
+      "Local capability when remote tools aren’t enough. Travel, business, property, transport, errands, relocation, and custom coordination.",
     type: "website",
   },
   alternates: {
@@ -21,6 +21,7 @@ const services = [
   {
     id: "travel",
     title: "Travel & Local Assistance",
+    href: "/services/travel-local-assistance",
     what: "Practical on-the-ground support for visitors who need more than a booking confirmation.",
     common: [
       "Airport coordination and meet-and-greet",
@@ -36,6 +37,7 @@ const services = [
   {
     id: "business",
     title: "Business Concierge",
+    href: "/services/business-concierge",
     what: "Local execution for professionals and organizations that don’t maintain a permanent presence.",
     common: [
       "Meeting and appointment coordination",
@@ -51,6 +53,7 @@ const services = [
   {
     id: "property",
     title: "Property Assistance",
+    href: "/services/property-asssistance",
     what: "Local eyes and coordination for property-related needs when you cannot be present.",
     common: [
       "Site visits and photo/video documentation",
@@ -66,6 +69,7 @@ const services = [
   {
     id: "transportation",
     title: "Transportation",
+    href: "/services/transportation",
     what: "Coordination of legitimate transportation needs for clients and visitors.",
     common: [
       "Airport transfers",
@@ -81,6 +85,7 @@ const services = [
   {
     id: "local-execution",
     title: "Local Execution",
+    href: "/services/local-execution",
     what: "Physical tasks that require someone present in the Philippines.",
     common: [
       "Errands and document-related tasks",
@@ -96,6 +101,7 @@ const services = [
   {
     id: "relocation",
     title: "Relocation & Extended Stay",
+    href: "/services/relocation-extended-stay",
     what: "Practical support for people preparing to move, stay longer, or establish themselves.",
     common: [
       "Housing coordination and viewings",
@@ -108,6 +114,36 @@ const services = [
     limitations:
       "We do not provide immigration, visa, or legal relocation services. Those require appropriate licensed professionals.",
   },
+  {
+    id: "other",
+    title: "Other / Custom Requests",
+    href: "/services/other",
+    what: "Not every request fits neatly into a category. Tell us what you’re trying to accomplish — we’ll assess whether we can handle it, coordinate the right provider, or build a customized solution.",
+    common: [
+      "Multi-service or multi-city assignments",
+      "One-time special projects",
+      "Temporary local support for companies",
+      "Unusual or hybrid requirements",
+    ],
+    coordinates:
+      "We review the request, determine whether it can be done safely and legally, design a scope if needed, and either execute, coordinate providers, or refer you to the right professional.",
+    limitations:
+      "Submission does not confirm service. We may decline requests outside our capabilities, or anything illegal, unsafe, suspicious, or unethical. Licensed work is referred to qualified providers.",
+  },
+];
+
+const generalLimits = [
+  "All requests are subject to Astra review and acceptance",
+  "Submission of a request does not automatically confirm the service",
+  "Services are subject to availability",
+  "Final scope and pricing must be confirmed before deployment",
+  "Astra may decline requests outside its capabilities",
+  "Astra may decline illegal, unsafe, suspicious, or unethical requests",
+  "Services requiring licenses are referred to appropriately qualified providers",
+  "Third-party services are subject to their own terms, availability, and pricing",
+  "Astra cannot guarantee outcomes controlled by government agencies, third parties, or circumstances outside our reasonable control",
+  "Additional expenses outside the approved scope require client approval",
+  "Payment may be required before an assignment is confirmed",
 ];
 
 export default function ServicesPage() {
@@ -128,7 +164,7 @@ export default function ServicesPage() {
       name: "Philippines",
     },
     description:
-      "On-the-ground coordination and practical assistance across the Philippines for travel, business, property, transportation, local tasks, and relocation.",
+      "On-the-ground coordination and practical assistance across the Philippines for travel, business, property, transportation, local tasks, relocation, and custom requests.",
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Astra Concierge Services",
@@ -199,8 +235,28 @@ export default function ServicesPage() {
                   <span className="inline-block text-xs font-mono font-semibold tracking-wider text-gold mb-3">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h2 className="heading-md mb-4">{service.title}</h2>
-                  <p className="body text-foreground/70">{service.what}</p>
+                  <h2 className="heading-md mb-4">
+                    {service.href ? (
+                      <Link
+                        href={service.href}
+                        className="hover:text-navy/80 transition-colors"
+                      >
+                        {service.title}
+                      </Link>
+                    ) : (
+                      service.title
+                    )}
+                  </h2>
+                  <p className="body text-foreground/70 mb-4">{service.what}</p>
+                  {service.href && service.id && (
+                    <Link
+                      href={service.href}
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-navy hover:text-gold transition-colors"
+                    >
+                      Full details
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
                 </div>
 
                 {/* Right: details */}
@@ -249,25 +305,51 @@ export default function ServicesPage() {
           </div>
         </section>
 
+        {/* General limitations */}
+        <section className="pb-16 sm:pb-20">
+          <div className="container-wide">
+            <div className="rounded-2xl border border-warm-200 bg-warm-50/60 p-6 sm:p-8 lg:p-10">
+              <h2 className="text-lg font-semibold text-navy mb-2">
+                General limitations for all services
+              </h2>
+              <p className="text-sm text-foreground/60 mb-6 max-w-2xl">
+                These apply across every category above, including custom
+                requests.
+              </p>
+              <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-2.5">
+                {generalLimits.map((item) => (
+                  <li
+                    key={item}
+                    className="flex gap-2.5 text-sm text-foreground/70 leading-relaxed"
+                  >
+                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="section-padding bg-navy text-white">
           <div className="container-narrow text-center">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-gold/80 mb-4">
-              Don&apos;t see your requirement?
+              Have a different request?
             </p>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight mb-4">
-              Just ask Astra.
+              Tell us what you need.
             </h2>
             <p className="text-base sm:text-lg text-white/65 max-w-lg mx-auto mb-8 leading-relaxed">
-              If it requires someone on the ground in the Philippines, tell us
-              what you&apos;re trying to accomplish. We&apos;ll say clearly
-              whether we can help.
+              We&apos;ll review it and let you know whether Astra can handle it
+              — directly, through a coordinated provider, or as a custom scope.
+              Initial request review is free.
             </p>
             <Link
               href="/request"
               className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-navy font-semibold px-6 py-3 rounded-xl transition-colors"
             >
-              Tell us what you need
+              Submit a request
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
