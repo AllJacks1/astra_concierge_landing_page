@@ -22,7 +22,7 @@ export function Founder() {
 
           {/* Content */}
           <div className="order-1 lg:order-2">
-            <p className="eyebrow mb-4">People you can actually verify</p>
+            <p className="eyebrow mb-4">A name and a face, not a brand</p>
             <h2 className="heading-lg mb-2">Mares Mae Nuera</h2>
             <p className="text-base font-medium text-navy/80 mb-1">
               Founder & CEO
@@ -33,25 +33,24 @@ export function Founder() {
 
             <div className="space-y-4 body mb-8">
               <p>
-                Mares Mae Nuera founded Astra Group of Companies with a focus on
-                professional services that bridge the gap between international
-                clients and reliable local execution in the Philippines.
+                Most people abroad don’t need another platform. They need
+                someone local who will actually show up, follow through, and
+                take responsibility when things get complicated.
               </p>
               <p>
-                With experience in real estate, corporate coordination and
-                client-facing operations, she built Astra Concierge as a response
-                to a recurring problem: capable people abroad who simply need
-                someone trustworthy on the ground.
+                That gap is why Mares built Astra. Years of real estate and
+                client work made one pattern clear: capable people overseas kept
+                running into the same problem — no one they could fully trust
+                on the ground.
               </p>
               <p>
-                Her visibility as founder is intentional. Clients should know
-                who is accountable for the company that coordinates their
-                requests.
+                Her name and face are on this page on purpose. If something
+                goes wrong, you should know exactly who is accountable.
               </p>
             </div>
 
             <Link href="/about" className="btn-primary rounded-xl">
-              Meet the Astra Team
+              Meet the people behind Astra
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
