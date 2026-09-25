@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Paperclip, AlertTriangle } from "lucide-react";
 import { cn } from "@/app/lib/utils";
 
 const steps = [
@@ -15,11 +15,11 @@ const steps = [
 
 const serviceOptions = [
   "Travel & Local Assistance",
-  "Business",
-  "Property",
+  "Business Concierge",
+  "Property Assistance",
   "Transportation",
   "Errand / Local Execution",
-  "Relocation",
+  "Relocation / Extended Stay",
   "Multiple Requirements",
   "Other",
 ];
@@ -35,351 +35,511 @@ const locationOptions = [
 ];
 
 const urgencyOptions = [
-  "Today",
-  "Within 48 hours",
-  "Within one week",
-  "Future date",
+  "Today / Urgent",
+  "Within 48 Hours",
+  "Within 7 Days",
+  "Future Date",
 ];
+
+function OptionButton({
+  selected,
+  onClick,
+  children,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "group relative text-left px-4 py-3.5 rounded-xl border text-sm font-medium transition-all duration-200",
+        selected
+          ? "border-navy bg-navy text-white shadow-sm"
+          : "border-warm-200 bg-white text-navy/80 hover:border-navy/25 hover:bg-warm-50/50",
+      )}
+    >
+      <span className="flex items-center justify-between gap-2">
+        <span>{children}</span>
+        {selected && (
+          <Check className="w-4 h-4 shrink-0 opacity-90" strokeWidth={2.5} />
+        )}
+      </span>
+    </button>
+  );
+}
+
+function FieldLabel({
+  children,
+  optional,
+  required,
+}: {
+  children: React.ReactNode;
+  optional?: boolean;
+  required?: boolean;
+}) {
+  return (
+    <label className="block text-sm font-medium text-navy mb-1.5">
+      {children}{" "}
+      {required && <span className="text-navy/35">*</span>}
+      {optional && (
+        <span className="text-navy/35 font-normal">(optional)</span>
+      )}
+    </label>
+  );
+}
+
+const inputClasses =
+  "w-full px-4 py-3 rounded-xl border border-warm-200 bg-warm-50/30 text-sm text-navy placeholder:text-navy/35 focus:outline-none focus:ring-2 focus:ring-navy/15 focus:border-navy/40 focus:bg-white transition-colors";
 
 export function RequestForm() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     service: "",
+    serviceOther: "",
     location: "",
+    locationOther: "",
     dateRange: "",
     urgency: "",
     details: "",
     physicalPresence: "",
+    attachment: "",
     name: "",
     email: "",
     phone: "",
     nationality: "",
+    currentCountry: "",
+    consent: false,
   });
 
-  const update = (field: string, value: string) => {
+  const update = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const canProceed = () => {
     switch (currentStep) {
       case 1:
-        return !!formData.service;
+        if (!formData.service) return false;
+        if (formData.service === "Other" && !formData.serviceOther.trim())
+          return false;
+        return true;
       case 2:
-        return !!formData.location;
+        if (!formData.location) return false;
+        if (formData.location === "Other" && !formData.locationOther.trim())
+          return false;
+        return true;
       case 3:
-        return !!formData.urgency;
+        return !!formData.dateRange.trim() && !!formData.urgency;
       case 4:
         return formData.details.trim().length > 10;
       case 5:
-        return formData.name.trim() && formData.email.trim();
+        return (
+          formData.name.trim().length > 0 &&
+          formData.email.trim().length > 0 &&
+          formData.consent
+        );
       default:
         return false;
     }
   };
 
   const handleSubmit = () => {
-    // In production this would POST to an API
     const requestId = `AST-CON-2026-${String(Math.floor(Math.random() * 90000) + 10000)}`;
     sessionStorage.setItem("astra_request_id", requestId);
     sessionStorage.setItem("astra_request_data", JSON.stringify(formData));
     router.push("/request/success");
   };
 
+  const progress = ((currentStep - 1) / (steps.length - 1)) * 100;
+
   return (
     <div className="max-w-2xl mx-auto">
       {/* Progress */}
-      <div className="mb-10">
+      <div className="mb-8 sm:mb-10">
         <div className="flex items-center justify-between mb-3">
-          {steps.map((step, i) => (
-            <div key={step.id} className="flex items-center">
-              <div
+          <p className="text-xs font-semibold tracking-[0.14em] uppercase text-navy/50">
+            Step {currentStep} of {steps.length}
+          </p>
+          <p className="text-xs font-medium text-navy/60">
+            {steps[currentStep - 1].label}
+          </p>
+        </div>
+
+        {/* Track */}
+        <div className="relative h-1.5 rounded-full bg-warm-200 overflow-hidden mb-5">
+          <div
+            className="absolute inset-y-0 left-0 rounded-full bg-navy transition-all duration-300 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+
+        {/* Step labels — desktop */}
+        <div className="hidden sm:flex justify-between">
+          {steps.map((step) => (
+            <button
+              key={step.id}
+              type="button"
+              onClick={() => {
+                if (step.id < currentStep) setCurrentStep(step.id);
+              }}
+              disabled={step.id > currentStep}
+              className={cn(
+                "flex items-center gap-2 text-xs font-medium transition-colors",
+                step.id === currentStep
+                  ? "text-navy"
+                  : step.id < currentStep
+                    ? "text-navy/60 hover:text-navy cursor-pointer"
+                    : "text-navy/30 cursor-default",
+              )}
+            >
+              <span
                 className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-colors",
-                  currentStep > step.id
+                  "flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-semibold",
+                  step.id < currentStep
                     ? "bg-navy text-white"
-                    : currentStep === step.id
-                      ? "bg-navy text-white"
-                      : "bg-warm-200 text-navy/50",
+                    : step.id === currentStep
+                      ? "bg-navy/10 text-navy ring-2 ring-navy/20"
+                      : "bg-warm-100 text-navy/40",
                 )}
               >
-                {currentStep > step.id ? (
-                  <Check className="w-4 h-4" strokeWidth={2.5} />
+                {step.id < currentStep ? (
+                  <Check className="w-3 h-3" strokeWidth={2.5} />
                 ) : (
                   step.id
                 )}
-              </div>
-              {i < steps.length - 1 && (
-                <div
-                  className={cn(
-                    "hidden sm:block w-8 lg:w-12 h-px mx-1",
-                    currentStep > step.id ? "bg-navy" : "bg-warm-200",
-                  )}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-between">
-          {steps.map((step) => (
-            <span
-              key={step.id}
-              className={cn(
-                "text-[10px] sm:text-xs font-medium tracking-wide",
-                currentStep >= step.id ? "text-navy" : "text-navy/40",
-              )}
-            >
+              </span>
               {step.label}
-            </span>
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Step content */}
-      <div className="bg-white rounded-3xl border border-warm-200 shadow-soft p-6 sm:p-10">
-        {currentStep === 1 && (
-          <div>
-            <h2 className="text-xl font-semibold text-navy mb-2">
-              What can Astra help you with?
-            </h2>
-            <p className="text-sm text-foreground/60 mb-6">
-              Select the closest category. You can refine details later.
-            </p>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {serviceOptions.map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => update("service", opt)}
-                  className={cn(
-                    "text-left px-4 py-3.5 rounded-xl border text-sm font-medium transition-all",
-                    formData.service === opt
-                      ? "border-navy bg-navy/5 text-navy"
-                      : "border-warm-200 text-navy/80 hover:border-navy/30",
-                  )}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+      {/* Card */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-warm-200 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.08)] overflow-hidden">
+        {/* Card top accent */}
+        <div className="h-1 bg-gradient-to-r from-navy via-navy/80 to-amber-400/60" />
 
-        {currentStep === 2 && (
-          <div>
-            <h2 className="text-xl font-semibold text-navy mb-2">
-              Where do you need assistance?
-            </h2>
-            <p className="text-sm text-foreground/60 mb-6">
-              Select the primary location for this request.
-            </p>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {locationOptions.map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => update("location", opt)}
-                  className={cn(
-                    "text-left px-4 py-3.5 rounded-xl border text-sm font-medium transition-all",
-                    formData.location === opt
-                      ? "border-navy bg-navy/5 text-navy"
-                      : "border-warm-200 text-navy/80 hover:border-navy/30",
-                  )}
-                >
-                  {opt}
-                </button>
-              ))}
+        <div className="p-6 sm:p-9">
+          {currentStep === 1 && (
+            <div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-navy tracking-tight mb-2">
+                What do you need help with?
+              </h2>
+              <p className="text-sm text-foreground/55 mb-7 leading-relaxed">
+                Pick the closest category. You can add detail in a later step.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-2.5">
+                {serviceOptions.map((opt) => (
+                  <OptionButton
+                    key={opt}
+                    selected={formData.service === opt}
+                    onClick={() => update("service", opt)}
+                  >
+                    {opt}
+                  </OptionButton>
+                ))}
+              </div>
+              {formData.service === "Other" && (
+                <div className="mt-4">
+                  <FieldLabel required>Please specify</FieldLabel>
+                  <input
+                    type="text"
+                    value={formData.serviceOther}
+                    onChange={(e) => update("serviceOther", e.target.value)}
+                    placeholder="e.g. Event coordination"
+                    className={inputClasses}
+                  />
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          )}
 
-        {currentStep === 3 && (
-          <div>
-            <h2 className="text-xl font-semibold text-navy mb-2">
-              When do you need assistance?
-            </h2>
-            <p className="text-sm text-foreground/60 mb-6">
-              Share timing so we can plan appropriately.
-            </p>
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-navy mb-2">
-                Date or date range
-              </label>
-              <input
-                type="text"
-                value={formData.dateRange}
-                onChange={(e) => update("dateRange", e.target.value)}
-                placeholder="e.g. October 15–20, 2026"
-                className="w-full px-4 py-3 rounded-xl border border-warm-200 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy"
+          {currentStep === 2 && (
+            <div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-navy tracking-tight mb-2">
+                Where do you need assistance?
+              </h2>
+              <p className="text-sm text-foreground/55 mb-7 leading-relaxed">
+                Primary location for this request. Multi-city is fine —
+                we&apos;ll scope it with you.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-2.5">
+                {locationOptions.map((opt) => (
+                  <OptionButton
+                    key={opt}
+                    selected={formData.location === opt}
+                    onClick={() => update("location", opt)}
+                  >
+                    {opt}
+                  </OptionButton>
+                ))}
+              </div>
+              {formData.location === "Other" && (
+                <div className="mt-4">
+                  <FieldLabel required>Please specify location</FieldLabel>
+                  <input
+                    type="text"
+                    value={formData.locationOther}
+                    onChange={(e) => update("locationOther", e.target.value)}
+                    placeholder="e.g. Bohol, Bacolod…"
+                    className={inputClasses}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {currentStep === 3 && (
+            <div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-navy tracking-tight mb-2">
+                When do you need this?
+              </h2>
+              <p className="text-sm text-foreground/55 mb-7 leading-relaxed">
+                Timing helps us plan capacity. Approximate dates are fine.
+              </p>
+              <div className="mb-7">
+                <FieldLabel required>Date or date range</FieldLabel>
+                <input
+                  type="text"
+                  value={formData.dateRange}
+                  onChange={(e) => update("dateRange", e.target.value)}
+                  placeholder="e.g. October 15–20, 2026"
+                  className={inputClasses}
+                />
+              </div>
+              <div>
+                <FieldLabel required>Urgency</FieldLabel>
+                <div className="grid sm:grid-cols-2 gap-2.5">
+                  {urgencyOptions.map((opt) => (
+                    <OptionButton
+                      key={opt}
+                      selected={formData.urgency === opt}
+                      onClick={() => update("urgency", opt)}
+                    >
+                      {opt}
+                    </OptionButton>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 4 && (
+            <div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-navy tracking-tight mb-2">
+                What do you need us to handle?
+              </h2>
+              <p className="text-sm text-foreground/55 mb-7 leading-relaxed">
+                Describe the outcome. Specifics (dates, places, people) help us
+                respond faster.
+              </p>
+              <textarea
+                value={formData.details}
+                onChange={(e) => update("details", e.target.value)}
+                rows={6}
+                placeholder="I'm arriving in Davao on October 15 and need a driver, workspace, and help arranging three business meetings…"
+                className="w-full px-4 py-3 rounded-xl border border-warm-200 bg-warm-50/30 text-sm text-navy placeholder:text-navy/35 focus:outline-none focus:ring-2 focus:ring-navy/15 focus:border-navy/40 focus:bg-white transition-colors resize-none mb-2"
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-navy mb-3">
-                Urgency
-              </label>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {urgencyOptions.map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    onClick={() => update("urgency", opt)}
-                    className={cn(
-                      "text-left px-4 py-3.5 rounded-xl border text-sm font-medium transition-all",
-                      formData.urgency === opt
-                        ? "border-navy bg-navy/5 text-navy"
-                        : "border-warm-200 text-navy/80 hover:border-navy/30",
-                    )}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+              <p className="text-xs text-navy/40 mb-7">
+                {formData.details.trim().length < 10
+                  ? "A few more details help us scope this properly."
+                  : `${formData.details.trim().length} characters`}
+              </p>
 
-        {currentStep === 4 && (
-          <div>
-            <h2 className="text-xl font-semibold text-navy mb-2">
-              What do you need accomplished?
-            </h2>
-            <p className="text-sm text-foreground/60 mb-6">
-              Describe the outcome you&apos;re looking for. The more detail, the
-              better.
-            </p>
-            <textarea
-              value={formData.details}
-              onChange={(e) => update("details", e.target.value)}
-              rows={6}
-              placeholder="I'm arriving in Davao on October 15 and need a driver, workspace, and assistance arranging three business meetings..."
-              className="w-full px-4 py-3 rounded-xl border border-warm-200 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy resize-none mb-6"
-            />
-            <div>
-              <label className="block text-sm font-medium text-navy mb-3">
-                Do you need someone physically with you?
-              </label>
-              <div className="flex flex-wrap gap-3">
-                {["Yes", "No", "Not sure"].map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    onClick={() => update("physicalPresence", opt)}
-                    className={cn(
-                      "px-5 py-2.5 rounded-full border text-sm font-medium transition-all",
-                      formData.physicalPresence === opt
-                        ? "border-navy bg-navy/5 text-navy"
-                        : "border-warm-200 text-navy/80 hover:border-navy/30",
-                    )}
-                  >
-                    {opt}
-                  </button>
-                ))}
+              <div className="mb-7">
+                <FieldLabel>
+                  Do you need someone physically present?
+                </FieldLabel>
+                <div className="flex flex-wrap gap-2">
+                  {["Yes", "No", "Not Sure"].map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      onClick={() => update("physicalPresence", opt)}
+                      className={cn(
+                        "px-5 py-2.5 rounded-full border text-sm font-medium transition-all duration-200",
+                        formData.physicalPresence === opt
+                          ? "border-navy bg-navy text-white"
+                          : "border-warm-200 text-navy/75 hover:border-navy/25 bg-white",
+                      )}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <FieldLabel optional>
+                  Attach a file or document, if needed
+                </FieldLabel>
+                <label
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3.5 rounded-xl border border-dashed cursor-pointer transition-colors text-sm",
+                    formData.attachment
+                      ? "border-navy/40 bg-warm-50/50 text-navy"
+                      : "border-warm-200 bg-warm-50/30 text-navy/55 hover:border-navy/30 hover:text-navy",
+                  )}
+                >
+                  <Paperclip className="w-4 h-4 shrink-0" />
+                  <span className="truncate">
+                    {formData.attachment || "Choose a file…"}
+                  </span>
+                  <input
+                    type="file"
+                    className="sr-only"
+                    onChange={(e) =>
+                      update("attachment", e.target.files?.[0]?.name ?? "")
+                    }
+                  />
+                </label>
+                <div className="mt-3 flex gap-2.5 rounded-xl bg-amber-50/70 border border-amber-200/60 px-3.5 py-3">
+                  <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+                  <p className="text-xs text-amber-800/90 leading-relaxed">
+                    Please do not upload passwords, credit card information,
+                    banking credentials or highly sensitive personal
+                    information.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-
-        {currentStep === 5 && (
-          <div>
-            <h2 className="text-xl font-semibold text-navy mb-2">
-              How can we reach you?
-            </h2>
-            <p className="text-sm text-foreground/60 mb-6">
-              We&apos;ll use your preferred channel to discuss the request.
-            </p>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-navy mb-1.5">
-                  Name <span className="text-navy/40">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => update("name", e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-warm-200 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-navy mb-1.5">
-                  Email <span className="text-navy/40">*</span>
-                </label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => update("email", e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-warm-200 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-navy mb-1.5">
-                  WhatsApp / preferred communication
-                </label>
-                <input
-                  type="text"
-                  value={formData.phone}
-                  onChange={(e) => update("phone", e.target.value)}
-                  placeholder="+63 or country code"
-                  className="w-full px-4 py-3 rounded-xl border border-warm-200 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-navy mb-1.5">
-                  Nationality / current country{" "}
-                  <span className="text-navy/40 font-normal">(optional)</span>
-                </label>
-                <input
-                  type="text"
-                  value={formData.nationality}
-                  onChange={(e) => update("nationality", e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-warm-200 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy"
-                />
-              </div>
-            </div>
-            <p className="mt-6 text-xs text-foreground/50 leading-relaxed">
-              By submitting this request, you agree to Astra&apos;s Privacy
-              Policy and Terms of Service.
-            </p>
-          </div>
-        )}
-
-        {/* Navigation */}
-        <div className="mt-8 pt-6 border-t border-warm-200 flex justify-between">
-          {currentStep > 1 ? (
-            <button
-              type="button"
-              onClick={() => setCurrentStep((s) => s - 1)}
-              className="btn-ghost"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </button>
-          ) : (
-            <div />
           )}
 
-          {currentStep < 5 ? (
-            <button
-              type="button"
-              onClick={() => canProceed() && setCurrentStep((s) => s + 1)}
-              disabled={!canProceed()}
-              className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              Continue
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={!canProceed()}
-              className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              Submit Request
-              <ArrowRight className="w-4 h-4" />
-            </button>
+          {currentStep === 5 && (
+            <div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-navy tracking-tight mb-2">
+                How should we reach you?
+              </h2>
+              <p className="text-sm text-foreground/55 mb-7 leading-relaxed">
+                We&apos;ll reply on your preferred channel to confirm scope and
+                next steps.
+              </p>
+              <div className="space-y-4">
+                <div>
+                  <FieldLabel required>Full Name</FieldLabel>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => update("name", e.target.value)}
+                    className={inputClasses}
+                    required
+                  />
+                </div>
+                <div>
+                  <FieldLabel required>Email Address</FieldLabel>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => update("email", e.target.value)}
+                    className={inputClasses}
+                    required
+                  />
+                </div>
+                <div>
+                  <FieldLabel optional>WhatsApp / preferred communication</FieldLabel>
+                  <input
+                    type="text"
+                    value={formData.phone}
+                    onChange={(e) => update("phone", e.target.value)}
+                    placeholder="+63 or country code"
+                    className={inputClasses}
+                  />
+                </div>
+                <div>
+                  <FieldLabel optional>Nationality</FieldLabel>
+                  <input
+                    type="text"
+                    value={formData.nationality}
+                    onChange={(e) => update("nationality", e.target.value)}
+                    className={inputClasses}
+                  />
+                </div>
+                <div>
+                  <FieldLabel optional>Current country</FieldLabel>
+                  <input
+                    type="text"
+                    value={formData.currentCountry}
+                    onChange={(e) => update("currentCountry", e.target.value)}
+                    className={inputClasses}
+                  />
+                </div>
+              </div>
+
+              {/* Consent */}
+              <label className="mt-7 flex items-start gap-3 cursor-pointer select-none">
+                <span
+                  className={cn(
+                    "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors",
+                    formData.consent
+                      ? "bg-navy border-navy text-white"
+                      : "border-warm-200 bg-white",
+                  )}
+                >
+                  {formData.consent && (
+                    <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                  )}
+                </span>
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={formData.consent}
+                  onChange={(e) => update("consent", e.target.checked)}
+                />
+                <span className="text-sm text-foreground/60 leading-relaxed">
+                  I agree to Astra&apos;s{" "}
+                  <a
+                    href="/legal/privacy"
+                    className="underline underline-offset-2 hover:text-navy"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  and understand that submitting a request does not guarantee
+                  acceptance of the assignment.
+                </span>
+              </label>
+            </div>
           )}
+
+          {/* Navigation */}
+          <div className="mt-8 pt-6 border-t border-warm-100 flex items-center justify-between gap-4">
+            {currentStep > 1 ? (
+              <button
+                type="button"
+                onClick={() => setCurrentStep((s) => s - 1)}
+                className="inline-flex items-center gap-2 text-sm font-medium text-navy/60 hover:text-navy transition-colors py-2.5 px-1"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </button>
+            ) : (
+              <div />
+            )}
+
+            {currentStep < 5 ? (
+              <button
+                type="button"
+                onClick={() => canProceed() && setCurrentStep((s) => s + 1)}
+                disabled={!canProceed()}
+                className="inline-flex items-center gap-2 bg-navy text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-navy/90 transition-colors disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-navy"
+              >
+                Continue
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={!canProceed()}
+                className="inline-flex items-center gap-2 bg-navy text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-navy/90 transition-colors disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-navy"
+              >
+                Submit request
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
