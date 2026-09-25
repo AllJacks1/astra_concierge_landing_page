@@ -8,7 +8,7 @@ export function Founder() {
       <div className="container-wide">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Portrait */}
-          <div className="relative order-2 lg:order-1">
+          <div className="relative order-1">
             <div className="relative aspect-[4/5] max-w-md mx-auto lg:mx-0 rounded-3xl overflow-hidden shadow-elevated">
               <Image
                 src="/images/astra_ceo.png"
@@ -21,7 +21,7 @@ export function Founder() {
           </div>
 
           {/* Content */}
-          <div className="order-1 lg:order-2">
+          <div className="order-2">
             <p className="eyebrow mb-4">A name and a face, not a brand</p>
             <h2 className="heading-lg mb-2">Mares Mae Nuera</h2>
             <p className="text-base font-medium text-navy/80 mb-1">
