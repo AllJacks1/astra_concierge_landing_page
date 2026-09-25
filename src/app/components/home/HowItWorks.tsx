@@ -32,7 +32,8 @@ const steps = [
   {
     number: "03",
     title: "You receive a clear proposal",
-    description: "Scope, requirements, and cost — defined before anything begins.",
+    description:
+      "Scope, requirements, and cost — defined before anything begins.",
     image: "/images/how-it-works/03-proposal.jpg",
     alt: "Clear proposal and scope",
   },
@@ -46,7 +47,8 @@ const steps = [
   {
     number: "05",
     title: "We handle everything",
-    description: "The right person is assigned. You stay informed, not involved.",
+    description:
+      "The right person is assigned. You stay informed, not involved.",
     image: "/images/how-it-works/05-coordinate.jpg",
     alt: "Astra coordinating the request",
   },
@@ -150,7 +152,6 @@ function StepCard({
     [1, isLast ? 1 : 0.6],
   );
   const filter = useTransform(brightness, (v) => `brightness(${v})`);
-  const imgY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
   const flip = index % 2 === 1;
 
   return (
@@ -188,24 +189,19 @@ function StepCard({
             </p>
           </div>
 
-          {/* Image with parallax */}
+          {/* Image — static, no parallax */}
           <div
             className={`relative mt-8 min-h-0 flex-1 self-stretch overflow-hidden rounded-2xl bg-white/5 lg:mt-0 ${
               flip ? "lg:order-1" : ""
             }`}
           >
-            <motion.div
-              style={{ y: imgY }}
-              className="absolute left-0 right-0 -top-[6%] -bottom-[6%]"
-            >
-              <Image
-                src={step.image}
-                alt={step.alt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 55vw"
-                className="object-cover"
-              />
-            </motion.div>
+            <Image
+              src={step.image}
+              alt={step.alt}
+              fill
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              className="object-cover"
+            />
           </div>
         </motion.article>
       </div>
@@ -303,7 +299,10 @@ export function HowItWorks() {
             transition={{ duration: 0.7, delay: 0.4, ease: EASE }}
             className="mt-10"
           >
-            <Link href="/request" className="btn-primary group bg-white text-navy rounded-xl">
+            <Link
+              href="/request"
+              className="btn-primary group bg-white text-navy rounded-xl"
+            >
               Start a Request
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
