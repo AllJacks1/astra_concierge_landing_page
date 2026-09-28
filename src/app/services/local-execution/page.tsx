@@ -7,6 +7,9 @@ import {
   MessageSquare,
   Package,
   FileText,
+  ShieldCheck,
+  Clock3,
+  Sparkles,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -73,46 +76,87 @@ const pricing = [
     price: "From ₱1,500",
     detail:
       "Single-point basic task (e.g., simple pickup, drop-off, or quick local task).",
+    features: [
+      "Single-point task",
+      "Pickup or drop-off",
+      "Status confirmation",
+    ],
   },
   {
     name: "Pickup / Delivery Coordination",
     price: "From ₱1,500",
     detail: "Coordinating pickup and delivery of approved items or documents.",
+    features: [
+      "Approved items or documents",
+      "Pickup & handoff",
+      "Delivery confirmation",
+    ],
   },
   {
     name: "Physical Location Check",
     price: "From ₱2,000",
     detail:
       "On-site visit to confirm physical existence and operational status of a site or business.",
+    features: [
+      "On-site presence check",
+      "Operational status update",
+      "Written summary",
+    ],
   },
   {
     name: "Photo / Video Verification",
     price: "From ₱2,500",
     detail: "Observational site visit with a photo and video visual report.",
+    features: [
+      "Photo & video report",
+      "Observational documentation",
+      "Digital delivery",
+    ],
   },
   {
     name: "Purchasing / Sourcing Assistance",
     price: "From ₱1,500 + item cost",
     detail:
       "Sourcing or buying approved products (item costs funded separately).",
+    features: [
+      "Product sourcing",
+      "Approved purchases only",
+      "Item cost separate",
+    ],
   },
   {
     name: "Half-Day Local Execution",
     price: "From ₱3,500",
     detail:
       "Up to 4 consecutive hours of dedicated field tasks or multi-stop errands.",
+    features: [
+      "Up to 4 consecutive hours",
+      "Multi-stop capability",
+      "Dedicated runner",
+    ],
   },
   {
     name: "Full-Day Local Execution",
     price: "From ₱5,500",
     detail:
       "Up to 8 consecutive hours of dedicated field tasks or multi-stop errands.",
+    features: [
+      "Up to 8 consecutive hours",
+      "Full-day scheduling",
+      "Priority coordination",
+    ],
+    popular: true,
   },
   {
     name: "Multiple Locations / Complex",
     price: "Custom quote",
     detail:
       "Tailored multi-stop or complex project requiring extensive logistics.",
+    features: [
+      "Custom logistics plan",
+      "Multi-location coverage",
+      "Project coordination",
+    ],
   },
 ];
 
@@ -159,14 +203,24 @@ export default function ErrandsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="pt-28">
-        {/* Hero */}
-        <section className="pb-14 sm:pb-16 lg:pb-20">
+      <div>
+        {/* ── Hero ─────────────────────────────────────────────── */}
+        <section className="relative overflow-hidden pb-14 sm:pb-16 lg:pb-20">
+          {/* ambient background */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10"
+          >
+            <div className="absolute inset-0 bg-linear-to-b from-warm-50 to-white" />
+            <div className="absolute -top-24 right-0 h-96 w-96 rounded-full bg-amber-100/50 blur-3xl" />
+            <div className="absolute top-32 -left-24 h-72 w-72 rounded-full bg-emerald-100/40 blur-3xl" />
+          </div>
+
           <div className="container-wide">
-            <div className="max-w-3xl">
+            <div className="max-w-3xl pt-28">
               <p className="eyebrow mb-4">Service</p>
               <h1 className="heading-xl mb-5">Errands &amp; Local Execution</h1>
-              <p className="body-lg text-foreground/70 max-w-2xl mb-6">
+              <p className="body-lg text-foreground/70 max-w-2xl mb-8">
                 For legitimate tasks that need someone physically on the ground
                 in the Philippines. Pickups and deliveries, purchasing and
                 sourcing, location visits, document collection, basic physical
@@ -174,11 +228,7 @@ export default function ErrandsPage() {
                 and other approved errands when you cannot handle them
                 personally.
               </p>
-              <p className="text-sm text-navy/60 mb-8 max-w-xl">
-                From ₱1,500 · Need something legitimately handled in the
-                Philippines while you&apos;re away? Tell us what you need.
-              </p>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 mb-10">
                 <Link href="/request" className="btn-primary rounded-xl">
                   Request this service
                   <ArrowRight className="w-4 h-4" />
@@ -187,56 +237,86 @@ export default function ErrandsPage() {
                   See pricing
                 </a>
               </div>
+
+              {/* trust chips */}
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-foreground/55">
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                  Verified local runners
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Clock3 className="h-4 w-4 text-emerald-600" />
+                  Photo &amp; video proof
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Sparkles className="h-4 w-4 text-emerald-600" />
+                  Clear quotation, no surprises
+                </span>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Can / Cannot */}
+        {/* ── Can / Cannot ─────────────────────────────────────── */}
         <section className="pb-16 sm:pb-20">
           <div className="container-wide">
-            <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
-              <div className="rounded-2xl border border-warm-200 bg-white p-6 sm:p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-                    <Check className="h-5 w-5" strokeWidth={2} />
+            <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+              {/* What Astra can do */}
+              <div className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-900/5 sm:p-8">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/25 ring-1 ring-emerald-500">
+                    <Check className="h-5 w-5" strokeWidth={2.5} />
                   </div>
-                  <h2 className="text-lg font-semibold text-navy">
-                    What Astra can do
-                  </h2>
+                  <div>
+                    <h2 className="text-lg font-semibold text-navy">
+                      What Astra can do
+                    </h2>
+                    <p className="text-xs font-medium uppercase tracking-wide text-emerald-600">
+                      Capabilities
+                    </p>
+                  </div>
                 </div>
-                <ul className="space-y-3">
+                <ul className="space-y-1">
                   {canDo.map((item) => (
                     <li
                       key={item}
-                      className="flex gap-3 text-sm text-foreground/75 leading-relaxed"
+                      className="flex gap-3 rounded-lg px-3 py-2 text-sm leading-relaxed text-foreground/80 transition-colors hover:bg-emerald-50/60"
                     >
-                      <Check
-                        className="h-4 w-4 shrink-0 text-emerald-600 mt-0.5"
-                        strokeWidth={2.25}
-                      />
+                      <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-100">
+                        <Check
+                          className="h-3 w-3 text-emerald-700"
+                          strokeWidth={3}
+                        />
+                      </span>
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="rounded-2xl border border-warm-200 bg-warm-50/80 p-6 sm:p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy/5 text-navy">
-                    <X className="h-5 w-5" strokeWidth={2} />
+              {/* What Astra cannot do */}
+              <div className="group relative overflow-hidden rounded-2xl border border-warm-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-warm-900/5 sm:p-8">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-warm-100 text-warm-500 ring-1 ring-warm-200">
+                    <X className="h-5 w-5" strokeWidth={2.5} />
                   </div>
-                  <h2 className="text-lg font-semibold text-navy">
-                    What Astra cannot do
-                  </h2>
+                  <div>
+                    <h2 className="text-lg font-semibold text-navy">
+                      What Astra cannot do
+                    </h2>
+                    <p className="text-xs font-medium uppercase tracking-wide text-warm-400">
+                      Limitations
+                    </p>
+                  </div>
                 </div>
-                <ul className="space-y-3">
+                <ul className="space-y-1">
                   {cannotDo.map((item) => (
                     <li
                       key={item}
-                      className="flex gap-3 text-sm text-foreground/70 leading-relaxed"
+                      className="flex gap-3 rounded-lg px-3 py-2 text-sm leading-relaxed text-foreground/60 transition-colors hover:bg-warm-50"
                     >
                       <X
-                        className="h-4 w-4 shrink-0 text-navy/40 mt-0.5"
+                        className="mt-0.5 h-4 w-4 shrink-0 text-warm-300"
                         strokeWidth={2.25}
                       />
                       {item}
@@ -248,8 +328,8 @@ export default function ErrandsPage() {
           </div>
         </section>
 
-        {/* Example requests */}
-        <section className="pb-16 sm:pb-20 bg-warm-100/50">
+        {/* ── Example requests ─────────────────────────────────── */}
+        <section className="pb-16 sm:pb-20 bg-gradient-to-b from-warm-100/60 to-warm-50/40 border-y border-warm-200/60">
           <div className="container-wide section-padding !pb-16 sm:!pb-20">
             <div className="max-w-2xl mb-10">
               <p className="eyebrow mb-3">Example requests</p>
@@ -259,10 +339,10 @@ export default function ErrandsPage() {
               {examples.map((quote) => (
                 <blockquote
                   key={quote}
-                  className="rounded-2xl border border-warm-200 bg-white p-5 sm:p-6"
+                  className="relative rounded-2xl border border-warm-200 bg-white p-5 sm:p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-7"
                 >
                   <MessageSquare
-                    className="h-4 w-4 text-amber-400 mb-3"
+                    className="h-5 w-5 text-amber-400 mb-4"
                     strokeWidth={1.75}
                   />
                   <p className="text-sm text-foreground/75 leading-relaxed">
@@ -274,8 +354,8 @@ export default function ErrandsPage() {
           </div>
         </section>
 
-        {/* Pricing */}
-        <section id="pricing" className="scroll-mt-28 pb-16 sm:pb-20">
+        {/* ── Pricing ──────────────────────────────────────────── */}
+        <section id="pricing" className="scroll-mt-28 py-16 sm:py-20">
           <div className="container-wide">
             <div className="max-w-2xl mb-10">
               <p className="eyebrow mb-3">Pricing</p>
@@ -287,36 +367,69 @@ export default function ErrandsPage() {
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 items-stretch">
               {pricing.map((tier) => (
                 <div
                   key={tier.name}
-                  className="rounded-2xl border border-warm-200 bg-white p-5 sm:p-6 flex flex-col"
+                  className={
+                    tier.popular
+                      ? "relative flex flex-col rounded-2xl border-2 border-amber-400/70 bg-white p-5 sm:p-6 shadow-md shadow-amber-900/5"
+                      : "relative flex flex-col rounded-2xl border border-warm-200 bg-white p-5 sm:p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                  }
                 >
+                  {tier.popular && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-amber-400 px-3 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-navy shadow-sm">
+                      Most popular
+                    </span>
+                  )}
                   <p className="text-xs font-semibold tracking-[0.12em] uppercase text-navy/45 mb-2">
                     {tier.name}
                   </p>
-                  <p className="text-xl font-semibold text-navy mb-3">
+                  <p className="text-xl font-semibold text-navy mb-2">
                     {tier.price}
                   </p>
-                  <p className="text-sm text-foreground/65 leading-relaxed mt-auto">
+                  <p className="text-sm text-foreground/65 leading-relaxed mb-4">
                     {tier.detail}
                   </p>
+                  {tier.features && (
+                    <ul className="mt-auto space-y-2 border-t border-warm-100 pt-4">
+                      {tier.features.map((f) => (
+                        <li
+                          key={f}
+                          className="flex items-center gap-2 text-xs text-foreground/70"
+                        >
+                          <Check
+                            className="h-3.5 w-3.5 shrink-0 text-emerald-600"
+                            strokeWidth={2.5}
+                          />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Requirements */}
+        {/* ── Requirements ─────────────────────────────────────── */}
         <section className="pb-16 sm:pb-20">
           <div className="container-wide">
-            <div className="rounded-2xl border border-warm-200 bg-warm-50/60 p-6 sm:p-8 lg:p-10">
-              <div className="flex items-center gap-3 mb-6">
-                <FileText className="h-5 w-5 text-navy/60" strokeWidth={1.75} />
-                <h2 className="text-lg font-semibold text-navy">
-                  Service requirements &amp; limits
-                </h2>
+            <div className="relative overflow-hidden rounded-2xl border border-amber-200/60 bg-gradient-to-br from-amber-50/80 to-white p-6 sm:p-8 lg:p-10">
+              <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amber-400 to-amber-200" />
+              <div className="mb-6 flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600 ring-1 ring-amber-200">
+                  <FileText className="h-5 w-5" strokeWidth={2} />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-navy">
+                    Service requirements &amp; limits
+                  </h2>
+                  <p className="text-xs font-medium uppercase tracking-wide text-amber-600/80">
+                    Please read before booking
+                  </p>
+                </div>
               </div>
               <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-3">
                 {requirements.map((item) => (
@@ -324,7 +437,9 @@ export default function ErrandsPage() {
                     key={item}
                     className="flex gap-2.5 text-sm text-foreground/70 leading-relaxed"
                   >
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-amber-400" />
+                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-amber-100">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                    </span>
                     {item}
                   </li>
                 ))}
@@ -347,14 +462,28 @@ export default function ErrandsPage() {
               </p>
             </div>
 
-            <div className="max-w-3xl space-y-12 sm:space-y-14">
+            <div className="max-w-3xl space-y-4 prose-legal">
               {/* 1. Terms */}
-              <article>
-                <h3 className="text-base font-semibold text-navy mb-4">
-                  1. Terms of Service
-                </h3>
-
-                <div className="space-y-5 text-sm text-foreground/70 leading-relaxed">
+              <details className="group rounded-2xl border border-warm-200 bg-white overflow-hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 sm:px-6 sm:py-5 text-base font-semibold text-navy hover:bg-warm-50/80 transition-colors [&::-webkit-details-marker]:hidden">
+                  <span>1. Terms of Service</span>
+                  <span className="shrink-0 text-navy/40 transition-transform duration-200 group-open:rotate-180">
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </span>
+                </summary>
+                <div className="border-t border-warm-200 px-5 py-5 sm:px-6 sm:py-6 space-y-5 text-sm text-foreground/70 leading-relaxed">
                   <div>
                     <h4 className="font-medium text-navy mb-1.5">
                       1.1 Acceptance of Terms &amp; Scope of Agreement
@@ -542,14 +671,29 @@ export default function ErrandsPage() {
                     </p>
                   </div>
                 </div>
-              </article>
+              </details>
 
               {/* 2. Privacy */}
-              <article>
-                <h3 className="text-base font-semibold text-navy mb-4">
-                  2. Privacy Policy
-                </h3>
-                <div className="space-y-5 text-sm text-foreground/70 leading-relaxed">
+              <details className="group rounded-2xl border border-warm-200 bg-white overflow-hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 sm:px-6 sm:py-5 text-base font-semibold text-navy hover:bg-warm-50/80 transition-colors [&::-webkit-details-marker]:hidden">
+                  <span>2. Privacy Policy</span>
+                  <span className="shrink-0 text-navy/40 transition-transform duration-200 group-open:rotate-180">
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </span>
+                </summary>
+                <div className="border-t border-warm-200 px-5 py-5 sm:px-6 sm:py-6 space-y-5 text-sm text-foreground/70 leading-relaxed">
                   <div>
                     <h4 className="font-medium text-navy mb-1.5">
                       2.1 Compliance with the Data Privacy Act
@@ -641,14 +785,29 @@ export default function ErrandsPage() {
                     </p>
                   </div>
                 </div>
-              </article>
+              </details>
 
               {/* 3. Refund */}
-              <article>
-                <h3 className="text-base font-semibold text-navy mb-4">
-                  3. Refund &amp; Cancellation Policy
-                </h3>
-                <div className="space-y-5 text-sm text-foreground/70 leading-relaxed">
+              <details className="group rounded-2xl border border-warm-200 bg-white overflow-hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 sm:px-6 sm:py-5 text-base font-semibold text-navy hover:bg-warm-50/80 transition-colors [&::-webkit-details-marker]:hidden">
+                  <span>3. Refund &amp; Cancellation Policy</span>
+                  <span className="shrink-0 text-navy/40 transition-transform duration-200 group-open:rotate-180">
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </span>
+                </summary>
+                <div className="border-t border-warm-200 px-5 py-5 sm:px-6 sm:py-6 space-y-5 text-sm text-foreground/70 leading-relaxed">
                   <div>
                     <h4 className="font-medium text-navy mb-1.5">
                       3.1 Astra Service Fee Cancellations
@@ -747,14 +906,29 @@ export default function ErrandsPage() {
                     </ol>
                   </div>
                 </div>
-              </article>
+              </details>
 
               {/* 4. Limitations */}
-              <article>
-                <h3 className="text-base font-semibold text-navy mb-4">
-                  4. Service Limitations &amp; Prohibited Activities
-                </h3>
-                <div className="space-y-5 text-sm text-foreground/70 leading-relaxed">
+              <details className="group rounded-2xl border border-warm-200 bg-white overflow-hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 sm:px-6 sm:py-5 text-base font-semibold text-navy hover:bg-warm-50/80 transition-colors [&::-webkit-details-marker]:hidden">
+                  <span>4. Service Limitations &amp; Scope</span>
+                  <span className="shrink-0 text-navy/40 transition-transform duration-200 group-open:rotate-180">
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </span>
+                </summary>
+                <div className="border-t border-warm-200 px-5 py-5 sm:px-6 sm:py-6 space-y-5 text-sm text-foreground/70 leading-relaxed">
                   <div>
                     <h4 className="font-medium text-navy mb-1.5">
                       4.1 Strict Prohibitions &amp; Anti-Illegality Rules
@@ -868,7 +1042,7 @@ export default function ErrandsPage() {
                     </p>
                   </div>
                 </div>
-              </article>
+              </details>
             </div>
           </div>
         </section>
@@ -878,7 +1052,10 @@ export default function ErrandsPage() {
           <div className="container-narrow text-center">
             <div className="flex justify-center mb-5">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
-                <Package className="h-5 w-5 text-amber-400" strokeWidth={1.75} />
+                <Package
+                  className="h-5 w-5 text-amber-400"
+                  strokeWidth={1.75}
+                />
               </div>
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight mb-4">

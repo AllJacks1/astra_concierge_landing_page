@@ -53,7 +53,7 @@ const services = [
   {
     id: "property",
     title: "Property Assistance",
-    href: "/services/property-asssistance",
+    href: "/services/property-assistance",
     what: "Local eyes and coordination for property-related needs when you cannot be present.",
     common: [
       "Site visits and photo/video documentation",
