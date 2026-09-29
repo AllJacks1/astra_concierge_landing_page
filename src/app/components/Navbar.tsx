@@ -9,7 +9,7 @@ import { cn } from "@/app/lib/utils";
 const navLinks = [
   { href: "/services", label: "Services" },
   { href: "/how-it-works", label: "How It Works" },
-  { href: "/#why-astra", label: "Why Astra" },
+  { href: "/why-astra", label: "Why Astra" },
   { href: "/locations", label: "Locations" },
   { href: "/about", label: "About" },
 ];
