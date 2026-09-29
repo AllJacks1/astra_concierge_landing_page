@@ -62,7 +62,7 @@ export default function ContactPage() {
             You don&apos;t need to know which service category applies. Just
             explain what you need.
           </p>
-          <Link href="/request" className="btn-primary">
+          <Link href="/request" className="btn-primary rounded-xl">
             Tell Us What You Need
             <ArrowRight className="w-4 h-4" />
           </Link>
